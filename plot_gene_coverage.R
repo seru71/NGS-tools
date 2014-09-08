@@ -11,7 +11,7 @@ genes=c("HADH","GLUD1","GCK","KCNJ11","INS","KLF11","BLK","SLC30A8",
 #genes=c("GLUD1")
 
 #bams=Sys.glob("~/Work//mgm-projects/test-data/*.bam")
-bams=Sys.glob("/export/astrakanfs/stefanj/data/amplicon_based_aug2014/bam/*.bam")
+bams=Sys.glob("/export/astrakanfs/stefanj/data/amplicon_based_aug2014/bam/2351-SJ-01*.bam")
 
 PLOT=T
 

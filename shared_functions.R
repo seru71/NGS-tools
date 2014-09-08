@@ -17,6 +17,7 @@ createBamIndex <- function(bamFile  ### path to the bam file
     indexBam(bamFile)
     file.rename(paste(bamFile, '.bai', sep=''), baiFile)
   } 
+  return(baiFile)
 }
 
 
@@ -29,10 +30,10 @@ getSpecificRegion <- function(chr, ### chromosome
                               bamFile ### bam file
                               ) {
   
-  createBamIndex(bamFile)
+  bamIndexFile = createBamIndex(bamFile)
 
   # if bam has chromosome names with "chr" prefix
-  if (length(grep("chr",seqnames(seqinfo(BamFile(bamFile))),ignore.case=T)) > 0) {    
+  if (length(grep("chr",seqnames(seqinfo(BamFile(bamFile, index=bamIndexFile))),ignore.case=T)) > 0) {    
     chr <- paste("chr",chr,sep="") 
   }
   
@@ -41,7 +42,7 @@ getSpecificRegion <- function(chr, ### chromosome
                         flag = scanBamFlag(isUnmappedQuery = FALSE)
   )                    
   
-  x <- scanBam(bamFile, param = param)[[1]]
+  x <- scanBam(bamFile, index=bamIndexFile, param = param)[[1]]
   ranges = GRanges(seqnames=Rle(x$rname), ranges=IRanges(x$pos, width=x$qwidth))
   #seqlevels(ranges) <- sub("^(\\d+)","chr\\1",seqlevels(ranges))
   seqlevels(ranges) <- sub("^chr","",seqlevels(ranges))
