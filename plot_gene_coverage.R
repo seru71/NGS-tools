@@ -8,12 +8,10 @@ genes=c("HADH","GLUD1","GCK","KCNJ11","INS","KLF11","BLK","SLC30A8",
 	"HNF1A","HNF4A","ABCC8",
 	"HNF1B","PDX1","PAX4","CEL","NEUROD1")
 
-genes=c("GLUD1")
+#genes=c("GLUD1")
 
-#bams=paste('../test-data/',c("2351-SJ-0001_S1.bam","2351-SJ-0002_S2.bam","2351-SJ-0003_S3.bam"),sep="")
-bams=paste("/export/astrakanfs/stefanj/data/amplicon_based_Jan2014/",
-           c(paste("2351-SJ-000",1:9,"_S",1:9,sep=""), paste("2351-SJ-00",10:96,"_S",10:96,sep="")),
-           ".bam",sep="")
+#bams=Sys.glob("~/Work//mgm-projects/test-data/*.bam")
+bams=Sys.glob("/export/astrakanfs/stefanj/data/amplicon_based_aug2014/bam/*.bam")
 
 PLOT=T
 
@@ -77,9 +75,11 @@ for (gene in genes) {
   
   boxplot(matrix(boxplot.data, byrow=T, nc=number.exons), add=T)
   title(gene)
-  dev.off()    
+  if (PLOT) {
+    dev.off()    
+    cat(paste("Saved ", figure.name, "\n"))
+  }
   
-  cat(paste("Saved ", figure.name, "\n"))
 }
 
 png('all-genes-mean-coverage.png')
