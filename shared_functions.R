@@ -57,34 +57,35 @@ get.gene.info <- function(gene) {
   #load ensembl mart
   if (!isS4(human)) {
     cat('Getting mart...')
-    human <<- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
+    #human <<- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
+    human <<- useMart("ENSEMBL_MART_ENSEMBL",host="feb2014.archive.ensembl.org", dataset = "hsapiens_gene_ensembl")
     cat('done.\n')
   }
   
   # treat differently mitochondrial genes, as they seem not to have CDS
   if (substr(gene,0,3)=='MT-') {
     gene_info <- getBM(
-      attributes = c("external_gene_name", "ensembl_gene_id", "ensembl_transcript_id", 
+      attributes = c("external_gene_id", "ensembl_gene_id", "ensembl_transcript_id", 
                      "chromosome_name", "start_position", "end_position", "strand"), 
       filters = c("hgnc_symbol"), 
       values = list(hgnc_symbol = gene), 
       mart=human)
     
     # rename columns for coherence with other genes
-    names(gene_info)<-c("external_gene_name", "ensembl_gene_id", "ensembl_transcript_id",
+    names(gene_info)<-c("external_gene_id", "ensembl_gene_id", "ensembl_transcript_id",
                         "chromosome_name", "genomic_coding_start", "genomic_coding_end", "strand")
     
   } else {
     
     gene_info <- getBM(
-      attributes = c("external_gene_name", "ensembl_gene_id", "ensembl_transcript_id", 
+      attributes = c("external_gene_id", "ensembl_gene_id", "ensembl_transcript_id", 
                      "chromosome_name", "genomic_coding_start","genomic_coding_end", "strand"), 
       filters = c("hgnc_symbol","with_ccds"), 
       values = list(hgnc_symbol = gene, with_ccds=TRUE), 
       mart=human)
   }
   
-  info <- subset(gene_info, external_gene_name == gene)
+  info <- subset(gene_info, external_gene_id == gene)
   # Remove exons with unknown boundaries
   info <- subset(info, !is.na(genomic_coding_start) & !is.na(genomic_coding_end))
   # Remove any references to Locus Reference Genomic locations
