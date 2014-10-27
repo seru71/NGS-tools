@@ -1,5 +1,5 @@
-
-if (file.exists('/export/astrakanfs')) {
+# test if on astrakan
+if (file.exists('/export/scratch/')) {
   .libPaths('/export/astrakanfs/stefanj/R/library')
 } 
 suppressMessages(require(Rsamtools,quiet=TRUE))
