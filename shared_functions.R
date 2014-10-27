@@ -61,13 +61,13 @@ get.gene.info <- function(gene) {
     cat('done.\n')
   }
   gene_info <- getBM(
-      attributes = c("external_gene_id", "ensembl_gene_id", "ensembl_transcript_id", 
+      attributes = c("external_gene_name", "ensembl_gene_id", "ensembl_transcript_id", 
                      "chromosome_name", "genomic_coding_start","genomic_coding_end", "strand"), 
       filters = c("hgnc_symbol","with_ccds"), 
       values = list(hgnc_symbol = gene, with_ccds=TRUE), 
       mart=human)
   
-  info <- subset(gene_info, external_gene_id == gene)
+  info <- subset(gene_info, external_gene_name == gene)
   # Remove exons with unknown boundaries
   info <- subset(info, !is.na(genomic_coding_start) & !is.na(genomic_coding_end))
   # Remove any references to Locus Reference Genomic locations
